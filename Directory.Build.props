@@ -1,0 +1,51 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>Nate McMaster</Authors>
+    <Product>DotNetCorePlugins</Product>
+    <Copyright>Copyright © Nate McMaster</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/natemcmaster/DotNetCorePlugins</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/natemcmaster/DotNetCorePlugins.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSymbols>true</IncludeSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>portable</DebugType>
+    <IsPackable>false</IsPackable>
+    <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
+    <LangVersion>9.0</LangVersion>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <Nullable>annotations</Nullable>
+    <Nullable Condition="'$(TargetFramework)' != 'netcoreapp2.1'">enable</Nullable>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)src\StrongName.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <NoWarn>$(NoWarn);NU5105</NoWarn>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);1591</WarningsNotAsErrors>
+
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateFullPaths Condition="'$(TERM_PROGRAM)' == 'vscode'">true</GenerateFullPaths>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory).build\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory).build\bin\$(MSBuildProjectName)\</BaseOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>1.4.0</VersionPrefix>
+    <VersionSuffix>beta</VersionSuffix>
+    <IncludePreReleaseLabelInPackageVersion Condition="'$(IS_STABLE_BUILD)' != 'true'">true</IncludePreReleaseLabelInPackageVersion>
+    <BuildNumber Condition=" '$(BuildNumber)' == '' ">$([MSBuild]::ValueOrDefault($(GITHUB_RUN_NUMBER), 0))</BuildNumber>
+    <VersionSuffix>$(VersionSuffix).$(BuildNumber)</VersionSuffix>
+    <SourceRevisionId Condition="'$(SourceRevisionId)' == ''">$(GITHUB_SHA)</SourceRevisionId>
+    <PackageVersion>$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(IncludePreReleaseLabelInPackageVersion)' == 'true'">$(PackageVersion)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion Condition="'$(SourceRevisionId)' != ''">$(PackageVersion)+$(SourceRevisionId)</InformationalVersion>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\releasenotes.props"
+          Condition="Exists('$(MSBuildProjectDirectory)\releasenotes.props')" />
+
+</Project>
